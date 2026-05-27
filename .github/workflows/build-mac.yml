@@ -1,0 +1,31 @@
+name: Build Mac Executable
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-mac:
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Instalar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Instalar dependências
+        run: |
+          pip install pyinstaller pandas openpyxl tkinterdnd2
+
+      - name: Gerar executável
+        run: |
+          pyinstaller --onedir --windowed repasse_gui.py
+
+      - name: Upload do executável
+        uses: actions/upload-artifact@v4
+        with:
+          name: repasse-mac
+          path: dist/repasse_gui.app
